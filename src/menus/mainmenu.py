@@ -2,7 +2,12 @@ import pygame
 import src.game.race as race
 import src.game.racers as racers
 from src.constants import (
-    FRAME_RATE
+    FRAME_RATE,
+    ROAD_HEIGHT,
+    WINDOW_WIDTH,
+    CARS_PATH,
+    CAR_PREFIX,
+    PNG_FORMAT
 )
 
 class MainMenu():
@@ -37,7 +42,10 @@ class MainMenu():
                     quitLoop = True
 
     def startRace(self):
-        road = pygame.image.load("res/roads/road_1.png")
+        road = pygame.image.load("res/roads/road_1L.png")
         car = pygame.image.load("res/cars/car_1.png").convert_alpha()
-        player = racers.Player(car, 500, 500)
-        racing = race.Race(self.__screen, road, player)
+        enemies = []
+        for i in range(2, 7):
+            enemies.append(pygame.image.load(CARS_PATH + CAR_PREFIX + str(i) + PNG_FORMAT).convert_alpha())
+        player = racers.Player(car, WINDOW_WIDTH // 2, ROAD_HEIGHT)
+        racing = race.Race(self.__screen, road, player, enemies)
