@@ -1,34 +1,34 @@
 #! /usr/bin/env python3
 
 import pygame
-import pygamepopup
+from src.menus.mainmenu import MainMenu
 
-def mainLoop() -> None:
+def initGame(screen : pygame.Surface) -> None:
     """
     Main game loop
     """
+    # set background
+    background = pygame.image.load(BACKGROUNDS_PATH + BACKGROUND_PREFIX + \
+        str(random.randint(1, 2)) + PNG_FORMAT)
+    menu = MainMenu(screen, background)
+    menu()
 
 
 if __name__ == "__main__":
     import random
-
     from src.constants import (
         GAME_TITLE,
         WINDOW_HEIGHT,
-        WINDOW_WIDTH
+        WINDOW_WIDTH,
+        BACKGROUND_PREFIX,
+        BACKGROUNDS_PATH,
+        PNG_FORMAT, 
     )
 
     pygame.init()
-    pygamepopup.init()
-
     pygame.display.set_caption(GAME_TITLE)
-    mainScreen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    background = pygame.image.load("res/backgrounds/background_" + str(random.randint(1, 2)) + ".png")
-    bgRect = background.get_rect()
-    mainScreen.fill([255, 255, 255])
-    mainScreen.blit(background, bgRect)
-    pygame.display.update()
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     
-    while(1): pass
+    initGame(screen)
 
     pygame.quit()
