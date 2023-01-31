@@ -13,16 +13,20 @@ from src.constants import (
 class MainMenu():
     def __init__(self, screen : pygame.Surface, background : pygame.Surface) -> None:
         self.__screen = screen
-        self.__screen.blit(background, background.get_rect())
+        self.__background = background
         self.__font = pygame.font.Font(pygame.font.get_default_font(), 60)
+        self.initMenu()
     
+    def initMenu(self):
+        self.__screen.blit(self.__background, self.__background.get_rect())
+        self.printText("Press ANY KEY to begin", 200, 100)
+        self.printText("    or press ESC to exit", 200, 200)
+
     def printText(self, text : str, x : int, y : int) -> None:
         txt = self.__font.render(text, True, pygame.color.Color("white"))
         self.__screen.blit(txt, (x, y))
 
     def __call__(self) -> None:
-        self.printText("Press ANY KEY to begin", 200, 100)
-        
         self.menuLoop()
         
 
@@ -38,8 +42,11 @@ class MainMenu():
                 if event.type == pygame.QUIT:
                     quitLoop = True
                 if event.type == pygame.KEYDOWN:
-                    self.startRace()
-                    quitLoop = True
+                    if event.key == pygame.K_ESCAPE:
+                        quitLoop = True
+                    else:
+                        self.startRace()
+                        self.initMenu()
 
     def startRace(self):
         road = pygame.image.load("res/roads/road_1L.png")
