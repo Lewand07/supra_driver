@@ -24,4 +24,3 @@ BACKGROUND_PREFIX = "background_"
 ROAD_PREFIX = "road_"
 
 PNG_FORMAT = ".png"
-
