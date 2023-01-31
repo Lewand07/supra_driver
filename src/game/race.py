@@ -8,7 +8,8 @@ from src.constants import (
     WINDOW_HEIGHT,
     ROADSIDE_LEFT,
     ROADSIDE_RIGHT,
-    ROAD_HEIGHT
+    ROAD_HEIGHT,
+    WINDOW_WIDTH
     )
 
 class Race():
@@ -44,6 +45,15 @@ class Race():
         txt = self.__font.render(text, True, pygame.color.Color("white"))
         screen.blit(txt, (0, 0))
 
+    def collision(self, screen : pygame.Surface) -> None:
+        explosion = pygame.image.load("res/cars/boom.png").convert_alpha()
+        exp = racers.Player(explosion, 0, 0)
+        exp.rect = self.__player.rect
+        self.__player.kill()
+        self.__playerGroup.add(exp)
+        self.__playerGroup.draw(screen)
+        pygame.display.flip()
+
     def race(self, screen : pygame.Surface) -> None:
         """
         Race loop
@@ -52,7 +62,7 @@ class Race():
         tiles = math.ceil(WINDOW_HEIGHT  / bg_height)
         i = 0
         scroll = 0
-        
+
         while self.__run:
             self.__clock.tick(FRAME_RATE)
             
@@ -97,6 +107,10 @@ class Race():
                     enemy.kill()
                     self.__score += 1
 
+                if pygame.sprite.collide_rect(self.__player, enemy):
+                    self.__gameOver = True
+                    self.collision(screen)
+
             while self.__gameOver:
                 self.__clock.tick(FRAME_RATE)
                 
@@ -110,8 +124,10 @@ class Race():
                             # reset the game
                             self.__gameOver = False
                             self.__score = 0
-                            #self.__enemiesGroup.empty()
-                            self.__player.rect.center = [0, 0]
+                            self.__enemiesGroup.empty()
+                            self.__playerGroup.empty()
+                            self.__player.rect.center = [WINDOW_WIDTH // 2, ROAD_HEIGHT]
+                            self.__playerGroup.add(self.__player)
                         elif event.key == pygame.K_n:
                             # exit the loops
                             self.__gameOver = False
