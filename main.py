@@ -28,6 +28,7 @@ if __name__ == "__main__":
     )
 
     pygame.init()
+    pygame.mixer.init()
     pygame.display.set_caption(GAME_TITLE)
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
