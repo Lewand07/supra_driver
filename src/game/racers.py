@@ -1,3 +1,7 @@
+"""
+Module with vehicle classes
+"""
+
 import pygame
 
 

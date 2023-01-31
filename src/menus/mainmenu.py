@@ -1,5 +1,10 @@
+"""
+Module with menu class
+"""
+
 import pygame
 import random
+
 import src.game.race as race
 import src.game.racers as racers
 from src.constants import (
@@ -13,20 +18,30 @@ from src.constants import (
     PNG_FORMAT,
     MUSIC_PATH,
     MP3_FORMAT,
+    BACKGROUND_PREFIX,
+    BACKGROUNDS_PATH,
 )
 
 
 class MainMenu:
-    def __init__(self, screen: pygame.Surface, background: pygame.Surface) -> None:
+    def __init__(self, screen: pygame.Surface) -> None:
         self.__screen = screen
-        self.__background = background
-        self.__font = pygame.font.Font(pygame.font.get_default_font(), 60)
+        self.__font = pygame.font.Font(pygame.font.get_default_font(), 40)
         self.initMenu()
 
     def initMenu(self):
+        """
+        Init menu components
+        """
+        self.__background = pygame.image.load(
+            BACKGROUNDS_PATH
+            + BACKGROUND_PREFIX
+            + str(random.randint(1, 2))
+            + PNG_FORMAT
+        )
         self.__screen.blit(self.__background, self.__background.get_rect())
-        self.printText("Press ANY KEY to begin", 200, 100)
-        self.printText("    or press ESC to exit", 200, 200)
+        self.printText("Press ANY KEY to begin", 300, 320)
+        self.printText("    or press ESC to exit", 300, 360)
         pygame.mixer.music.load(MUSIC_PATH + "menu" + MP3_FORMAT)
         pygame.mixer.music.play(-1)
 
@@ -55,7 +70,7 @@ class MainMenu:
                         self.startRace()
                         self.initMenu()
 
-    def startRace(self):
+    def startRace(self) -> None:
         road = pygame.image.load(
             ROADS_PATH + ROAD_PREFIX + str(random.randint(1, 4)) + PNG_FORMAT
         )
@@ -70,4 +85,4 @@ class MainMenu:
                 ).convert_alpha()
             )
         player = racers.Player(car, WINDOW_WIDTH // 2, ROAD_HEIGHT)
-        raceGame = race.Race(self.__screen, road, player, enemies)
+        race.Race(self.__screen, road, player, enemies)

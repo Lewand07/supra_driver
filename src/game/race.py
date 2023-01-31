@@ -1,6 +1,11 @@
+"""
+Module with race mechanism
+"""
+
 import pygame
 import math
 import random
+
 import src.game.racers as racers
 from src.constants import (
     FRAME_RATE,
@@ -109,16 +114,19 @@ class Race:
         """
         Race loop
         """
+
         bg_height = self.__background.get_height()
         tiles = math.ceil(WINDOW_HEIGHT / bg_height)
         i = 0
         scroll = 0
         gameSpeed = SPEED
 
+        # play background music
         pygame.mixer.music.load(MUSIC_PATH + "race" + MP3_FORMAT)
         pygame.mixer.music.play(-1)
         pygame.mixer.Sound.play(self.__driveSound, -1)
 
+        # game loop
         while self.__run:
             self.__clock.tick(FRAME_RATE)
 
@@ -171,7 +179,7 @@ class Race:
                 if enemy.rect.y >= WINDOW_HEIGHT:
                     enemy.kill()
                     self.__score += 1
-                    if self.__score % 8 == 0:
+                    if self.__score % 4 == 0:
                         gameSpeed += math.floor(SPEED / 5)
                 if pygame.sprite.collide_rect(self.__player, enemy):
                     self.__gameOver = True
@@ -194,7 +202,6 @@ class Race:
                             # reset the game
                             self.__gameOver = False
                             self.__score = 0
-                            increaseSpeed = 1.0
                             self.__enemiesGroup.empty()
                             self.__playerGroup.empty()
                             self.__player.rect.center = [WINDOW_WIDTH // 2, ROAD_HEIGHT]
